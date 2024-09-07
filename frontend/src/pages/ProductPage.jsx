@@ -1,17 +1,26 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Col, Row, Image, ListGroup, Card, Button } from 'react-bootstrap';
+import axios from 'axios';
 
-import products from '../products';
 import Rating from '../components/Rating'
 
 //Bootstrap'te her satır (row) 12 birimlik sütunlardan oluşur.
 
 const ProductPage = () => {
 
+  const [product, setProduct] = useState({});
+
   const { id: productId } = useParams();
-  const product = products.find((p) => p._id === productId);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const {data} = await axios.get(`/api/products/${productId}`);
+      setProduct(data);
+    }
+    fetchProduct();
+  }, [productId]);
 
   return (
     <>
